@@ -57,5 +57,8 @@
     "time-grunt": "^1.2.2",
     "uglify-js": "^2.8.14",
     "webpack": "^2.2.1"
+  },
+  "dependencies": {
+    "analytics-node": "^2.4.1"
   }
 }

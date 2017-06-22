@@ -69,5 +69,8 @@ module.exports = {
             jstree: path.resolve(__dirname, 'node_modules/jstree/dist/jstree.min.js'),
         },
     },
+    node: {
+      fs: 'empty'
+    },
     watch: false,
 };

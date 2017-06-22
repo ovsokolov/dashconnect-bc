@@ -242,6 +242,12 @@ export default class Product {
                 this.redirectTo(response.data.cart_item.cart_url || this.context.urls.cart);
             }
         });
+
+        if (window.analytics === null) {
+            console.log('In item add found');
+        } else {
+            console.log('In item add error!!');
+        }
     }
 
     /**

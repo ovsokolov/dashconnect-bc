@@ -2,9 +2,9 @@
 
 <form action="{{urls.compare}}" method='POST' data-product-compare>
     {{#if theme_settings.product_list_display_mode '===' 'grid'}}
-        {{> components/products/grid products=category.products show_compare=category.show_compare theme_settings=theme_settings}}
+        {{> components/products/grid products=category.products show_compare=category.show_compare theme_settings=theme_settings customer=customer}}
     {{else}}
-        {{> components/products/list products=category.products show_compare=category.show_compare theme_settings=theme_settings}}
+        {{> components/products/list products=category.products show_compare=category.show_compare theme_settings=theme_settings customer=customer}}
     {{/if}}
 </form>
 

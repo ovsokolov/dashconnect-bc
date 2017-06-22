@@ -4,6 +4,7 @@ import 'babel-polyfill';
 import $ from 'jquery';
 import Global from './theme/global';
 
+
 const getAccount = () => import('./theme/account');
 const getLogin = () => import('./theme/auth');
 const pageClasses = {
@@ -95,3 +96,4 @@ window.stencilBootstrap = function stencilBootstrap(templateFile, contextJSON = 
         },
     };
 };
+
