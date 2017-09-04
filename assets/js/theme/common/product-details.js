@@ -20,6 +20,7 @@ utils.hooks.on('cart-item-add', (event, form) => {
 
 utils.hooks.on('product-option-change', (event, changedOption) => {
     if (productSingleton) {
+        // console.log('in product-detail.js');
         productSingleton.productOptionsChanged(event, changedOption);
     }
 });
@@ -108,6 +109,10 @@ export default class Product {
         const $form = $changedOption.parents('form');
         const productId = $('[name="product_id"]', $form).val();
 
+        // console.log('option changed');
+        // console.log($changedOption);
+        // console.log(productId);
+
         // Do not trigger an ajax request if it's a file or if the browser doesn't support FormData
         if ($changedOption.attr('type') === 'file' || window.FormData === undefined) {
             return;
@@ -115,6 +120,8 @@ export default class Product {
 
         utils.api.productAttributes.optionChange(productId, $form.serialize(), (err, response) => {
             const productAttributesData = response.data || {};
+
+            // console.log(productAttributesData);
 
             this.updateProductAttributes(productAttributesData);
             this.updateView(productAttributesData);
@@ -244,9 +251,9 @@ export default class Product {
         });
 
         if (window.analytics === null) {
-            console.log('In item add found');
+            // console.log('In item add found');
         } else {
-            console.log('In item add error!!');
+            // console.log('In item add error!!');
         }
     }
 
@@ -409,6 +416,7 @@ export default class Product {
         const outOfStockMessage = ` (${data.out_of_stock_message})`;
 
         this.showProductImage(data.image);
+        // console.log('updateProductAttributes');
 
         if (behavior !== 'hide_option' && behavior !== 'label_option') {
             return;
@@ -417,8 +425,9 @@ export default class Product {
         $('[data-product-attribute-value]', this.$scope).each((i, attribute) => {
             const $attribute = $(attribute);
             const attrId = parseInt($attribute.data('product-attribute-value'), 10);
-
-
+            // console.log('in loop');
+            // console.log($attribute);
+            // console.log(attrId);
             if (inStockIds.indexOf(attrId) !== -1) {
                 this.enableAttribute($attribute, behavior, outOfStockMessage);
             } else {

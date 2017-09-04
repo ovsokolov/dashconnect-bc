@@ -1,7 +1,21 @@
 <div class="body">
     {{#block "hero"}} {{/block}}
     <div class="container">
+	    <div id="part-finder" class="findPartsContainer">
+		  <select id="vehicle-make" class="step1">
+		  </select>
+		  <select id="vehicle-model">
+		  </select>
+		  <select id="vehicle-year">
+		  </select>
+		  <select id="vehicle-option">
+		  </select>
+		  <input id="mmy-submit" type="button" value="Search" class="submitBtn">
+		  <input id="mmy-reset" type="button" value="Reset" class="resetBtn">
+		</div>
         {{#block "page"}} {{/block}}
     </div>
     {{> components/common/modal}}
 </div>
+
+

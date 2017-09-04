@@ -22,8 +22,10 @@ class Menu {
         this.onMenuClick = this.onMenuClick.bind(this);
         this.onDocumentClick = this.onDocumentClick.bind(this);
 
+
         // Listen
         this.bindEvents();
+        // console.log('menu constructor');
     }
 
     collapseAll() {
@@ -57,8 +59,24 @@ class Menu {
         }
     }
 
+
     onDocumentClick() {
         this.collapseAll();
+    }
+
+    before(next) {
+        // console.log('menu before');
+        next();
+    }
+
+    loaded(next) {
+        // console.log('menu loaded');
+        next();
+    }
+
+    after(next) {
+        // console.log('menu after');
+        next();
     }
 }
 

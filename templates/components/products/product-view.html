@@ -10,6 +10,11 @@
 
     <section class="productView-details">
         <div class="productView-product">
+            {{inject 'productID' product.id}}
+            {{inject 'productBreadcrumbs' breadcrumbs}}
+
+
+
             <h1 class="productView-title" {{#if schema}}itemprop="name"{{/if}}>{{product.title}}</h1>
 
             <h2 class="productView-brand"{{#if schema}} itemprop="brand" itemscope itemtype="http://schema.org/Brand"{{/if}}>
@@ -189,6 +194,10 @@
                         {{{dynamicComponent 'components/products/customizations'}}}
                     {{/each}}
                 <div data-product-option-change style="display:none;">
+                    <ul id='step-breadcrumb' style="display:none;">
+                    </ul>
+                    <label class="form-label form-label--alternate form-label--inlineSmall" id="step-name"></label>
+                    {{inject 'productOptions' product.options}}
                     {{#each product.options}}
                         {{{dynamicComponent 'components/products/options'}}}
                     {{/each}}
@@ -202,6 +211,7 @@
                         <span data-product-stock>{{product.stock_level}}</span>
                     </label>
                 </div>
+                <input type="button" style="display: none;" value="Prev" id="option-prev" class="button button--primary"><input type="button" style="display: none;" value="Next" id="option-next" class="button button--primary">
                 {{#if product.can_purchase}}
                     {{> components/products/add-to-cart}}
                 {{/if}}

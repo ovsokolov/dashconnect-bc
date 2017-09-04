@@ -20,7 +20,7 @@ export default class Cart extends PageManager {
         this.$mycystomer = this.context.mycustomer;
 
         const mycart = this.context.mycart;
-        console.log(mycart);
+        // console.log(mycart);
 
         const cartArray = [];
         mycart.forEach((arrayItem) => {
@@ -87,9 +87,9 @@ export default class Cart extends PageManager {
         });
 
         if (window.analytics === null) {
-            console.log('In cart update found');
+            // console.log('In cart update found');
         } else {
-            console.log('In cart update error!!');
+            // console.log('In cart update error!!');
         }
     }
 
@@ -104,9 +104,9 @@ export default class Cart extends PageManager {
         });
 
         if (window.analytics === null) {
-            console.log('In cart remove found');
+            // console.log('In cart remove found');
         } else {
-            console.log('In cart remove error!!');
+            // console.log('In cart remove error!!');
         }
     }
 

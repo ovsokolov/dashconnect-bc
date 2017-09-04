@@ -1,4 +1,4 @@
-<article class="card {{#if alternate}}card--alternate{{/if}}">
+<article class="card {{#if alternate}}card--alternate{{/if}}" id="alt-prd-{{id}}">
     <figure class="card-figure">
         {{#or price.non_sale_price_with_tax price.non_sale_price_without_tax}}
             {{#if theme_settings.product_sale_badges '===' 'sash'}}
