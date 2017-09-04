@@ -181,7 +181,7 @@
         </ul>
     </section>
 
-    <section class="productView-details">
+    <section class="productView-details  steps-section">
         <div class="productView-options">
             {{#if product.release_date }}
                 <p>{{product.release_date}}</p>
@@ -194,13 +194,15 @@
                         {{{dynamicComponent 'components/products/customizations'}}}
                     {{/each}}
                 <div data-product-option-change style="display:none;">
-                    <ul id='step-breadcrumb' style="display:none;">
+                    <ul id='step-breadcrumb' class="clearfix" style="display:none;">
                     </ul>
-                    <label class="form-label form-label--alternate form-label--inlineSmall" id="step-name"></label>
-                    {{inject 'productOptions' product.options}}
-                    {{#each product.options}}
-                        {{{dynamicComponent 'components/products/options'}}}
-                    {{/each}}
+                    <div id="div-option" class="bulkorder-content clearfix" style="display:none;">
+                        <label class="form-label form-label--alternate form-label--inlineSmall" id="step-name"></label>
+                        {{inject 'productOptions' product.options}}
+                        {{#each product.options}}
+                            {{{dynamicComponent 'components/products/options'}}}
+                        {{/each}}
+                    </div>
                 </div>
                 {{#if product.event_date}}
                     {{> components/products/event-date}}

@@ -304,6 +304,7 @@ export default class Product extends PageManager {
     startBuild() {
         $('#build-product').hide();
         $('#step-breadcrumb').show();
+        $('#div-option').show();
         this.currentStep = -1;
         this.moveNext();
     }
