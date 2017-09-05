@@ -37,6 +37,7 @@ export default class ProductDetails {
 
             utils.api.productAttributes.optionChange($productId, $form.serialize(), (err, response) => {
                 const attributesData = response.data || {};
+                // console.log(response.data);
 
                 this.updateProductAttributes(attributesData);
                 this.updateView(attributesData);
@@ -48,6 +49,11 @@ export default class ProductDetails {
         $productOptionsElement.show();
 
         this.previewModal = modalFactory('#previewModal')[0];
+
+        // this.productOptionsList = this.context.productOptions;
+        // console.log('ProductDetails constructor before');
+        // console.log(this.productOptionsList);
+        // console.log('ProductDetails constructor after');
     }
 
     /**
@@ -100,9 +106,18 @@ export default class ProductDetails {
         const $form = $changedOption.parents('form');
         const productId = $('[name="product_id"]', $form).val();
 
-        // console.log('option changed');
-        // console.log($changedOption);
-        // console.log(productId);
+        //console.log('Event');
+        //console.log(event.target);
+        //console.log(event.target.id);
+        // console.log(event.currentTarget);
+        // console.log(event.srcElement);
+        // if (event.target.id.startsWith('attribute_0_')){
+            // console.log('remove option');
+            // $('#attribute_0_124').prop('checked', true);
+        // } else {
+            // console.log('add option');
+            // $('#attribute_98').prop('checked', true);
+        // }
 
         // Do not trigger an ajax request if it's a file or if the browser doesn't support FormData
         if ($changedOption.attr('type') === 'file' || window.FormData === undefined) {
@@ -112,7 +127,7 @@ export default class ProductDetails {
         utils.api.productAttributes.optionChange(productId, $form.serialize(), (err, response) => {
             const productAttributesData = response.data || {};
 
-            // console.log(productAttributesData);
+            //console.log(productAttributesData);
 
             this.updateProductAttributes(productAttributesData);
             this.updateView(productAttributesData);
@@ -410,7 +425,7 @@ export default class ProductDetails {
         const outOfStockMessage = ` (${data.out_of_stock_message})`;
 
         this.showProductImage(data.image);
-        // console.log('updateProductAttributes');
+        console.log('updateProductAttributes');
 
         if (behavior !== 'hide_option' && behavior !== 'label_option') {
             return;
@@ -419,9 +434,9 @@ export default class ProductDetails {
         $('[data-product-attribute-value]', this.$scope).each((i, attribute) => {
             const $attribute = $(attribute);
             const attrId = parseInt($attribute.data('product-attribute-value'), 10);
-            // console.log('in loop');
-            // console.log($attribute);
-            // console.log(attrId);
+            console.log('in loop');
+            console.log($attribute);
+            console.log(attrId);
             if (inStockIds.indexOf(attrId) !== -1) {
                 this.enableAttribute($attribute, behavior, outOfStockMessage);
             } else {
