@@ -106,9 +106,9 @@ export default class ProductDetails {
         const $form = $changedOption.parents('form');
         const productId = $('[name="product_id"]', $form).val();
 
-        //console.log('Event');
-        //console.log(event.target);
-        //console.log(event.target.id);
+        // console.log('Event');
+        // console.log(event.target);
+        // console.log(event.target.id);
         // console.log(event.currentTarget);
         // console.log(event.srcElement);
         // if (event.target.id.startsWith('attribute_0_')){
@@ -127,7 +127,7 @@ export default class ProductDetails {
         utils.api.productAttributes.optionChange(productId, $form.serialize(), (err, response) => {
             const productAttributesData = response.data || {};
 
-            //console.log(productAttributesData);
+            // console.log(productAttributesData);
 
             this.updateProductAttributes(productAttributesData);
             this.updateView(productAttributesData);

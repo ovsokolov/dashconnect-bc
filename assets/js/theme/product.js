@@ -96,7 +96,7 @@ export default class Product extends PageManager {
 
         const breadCrumbsArray = this.context.productBreadcrumbs;
         const productID = this.context.productID;
-        //const productOptions = this.context.productOptions;
+        // const productOptions = this.context.productOptions;
         this.productOptionsList = this.context.productOptions;
         console.log(this.productOptionsList);
         this.productOptionsList.forEach((value) => {
@@ -181,19 +181,21 @@ export default class Product extends PageManager {
     }
 
     moveNext() {
-        console.log("display selected option start");
+        // console.log('display selected option start');
+        /*
         this.productOptionsList.forEach((value) => {
             const valuesArray = value.values;
-            //console.log(valuesArray);
+            // console.log(valuesArray);
             valuesArray.forEach((attribute) => {
                 const inputID = '#attribute_'.concat(attribute.id);
                 // console.log(inputID);
-                if($(inputID).is(':checked')) {
+                if ($(inputID).is(':checked')) {
                     console.log(attribute.label);
                 }
             });
         });
-        console.log("display selected option end");
+        */
+        // console.log('display selected option end');
         let nextStep = -1;
         // console.log('Current Step ', this.currentStep );
         for (let i = this.currentStep + 1; i < this.stepArray.length; i++) {
