@@ -1,13 +1,20 @@
 <article class="listItem">
     <figure class="listItem-figure">
-        <img class="listItem-image" src="{{getImage image 'productgallery_size' (cdn theme_settings.default_image_product)}}" alt="{{image.alt}}" title="{{image.alt}}">
-        {{#unless hide_product_quick_view}}
-            {{#if theme_settings.show_product_quick_view}}
-                <div class="listItem-figureBody">
-                    <a href="#" class="button button--small listItem-button quickview" data-product-id="{{id}}">{{lang 'products.quick_view'}}</a>
-                </div>
-            {{/if}}
-        {{/unless}}
+        <a href="{{url}}">
+            <img class="listItem-image" src="{{getImage image 'productgallery_size' (cdn theme_settings.default_image_product)}}" alt="{{image.alt}}" title="{{image.alt}}">
+            {{#unless hide_product_quick_view}}
+                {{#if theme_settings.show_product_quick_view}}
+                    <div class="listItem-figureBody">
+                        <a href="#" class="button button--small listItem-button quickview" data-product-id="{{id}}">{{lang 'products.quick_view'}}</a>
+                    </div>
+                {{/if}}
+            {{/unless}}
+        </a>
+        <!-- dashconnect befor 1.9.2
+        <a href="{{url}}">
+            <img class="listItem-image" src="{{getImage image 'productgallery_size' (cdn theme_settings.default_image_product)}}" alt="{{image.alt}}" title="{{image.alt}}">
+        </a>
+        -->
     </figure>
     <div class="listItem-body">
         <div class="listItem-content">
@@ -24,6 +31,20 @@
                 {{#if summary}}
                     <p>{{{summary}}}</p>
                 {{/if}}
+                <!--
+                <p class="listItem-brand">
+                    HDMI Input
+                </p>
+                <p class="listItem-brand">
+                    Rear Camera
+                </p>
+                <p class="listItem-brand">
+                    Front Camera
+                </p>
+                <p class="listItem-brand">
+                    Lane Watch Camera
+                </p>
+                -->
             </div>
             <div class="listItem-actions">
                 {{#or customer (if theme_settings.restrict_to_login '!==' true)}}
@@ -38,7 +59,7 @@
                             <a href="{{pre_order_add_to_cart_url}}" class="button button--primary">{{lang 'products.pre_order'}}</a>
                         {{/if}}
                         {{#if add_to_cart_url }}
-                            <a href="{{add_to_cart_url}}" class="button button--primary">{{lang 'products.add_to_cart'}}</a>
+                            <a href="{{url}}" class="button button--primary">{{lang "products.view_more"}}</a>
                         {{/if}}
                         {{#if out_of_stock_message }}
                             <a href="{{url}}" class="button button--small" data-product-id="{{id}}">{{out_of_stock_message}}</a>

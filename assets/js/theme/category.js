@@ -3,6 +3,7 @@ import CatalogPage from './catalog';
 import $ from 'jquery';
 import FacetedSearch from './common/faceted-search';
 
+
 export default class Category extends CatalogPage {
     loaded() {
         if ($('#facetedSearch').length > 0) {

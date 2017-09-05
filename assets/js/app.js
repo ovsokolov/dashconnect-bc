@@ -4,6 +4,7 @@ import 'babel-polyfill';
 import $ from 'jquery';
 import Global from './theme/global';
 
+
 const getAccount = () => import('./theme/account');
 const getLogin = () => import('./theme/auth');
 const pageClasses = {
@@ -70,11 +71,13 @@ window.stencilBootstrap = function stencilBootstrap(pageType, contextJSON = null
                 const pageClassImporter = pageClasses[pageType];
                 if (typeof pageClassImporter === 'function') {
                     PageClass = (await pageClassImporter()).default;
+                    // console.log('PageClass:', PageClass);
                 }
 
                 if (loadGlobal) {
                     globalClass = new Global();
                     globalClass.context = context;
+                    // console.log('globalClass', globalClass);
                 }
 
                 if (PageClass) {
@@ -83,6 +86,7 @@ window.stencilBootstrap = function stencilBootstrap(pageType, contextJSON = null
                 }
 
                 if (globalClass) {
+                    // console.log('globalClass load');
                     globalClass.load();
                 }
 
@@ -93,3 +97,4 @@ window.stencilBootstrap = function stencilBootstrap(pageType, contextJSON = null
         },
     };
 };
+

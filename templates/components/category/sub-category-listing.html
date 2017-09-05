@@ -1,0 +1,9 @@
+<form>
+	<ul class="productGrid">
+	    {{#each category.subcategories}}
+	    <li class="product">
+	        {{>components/category/sub-category-card theme_settings=theme_settings}} 
+	    </li>
+	    {{/each}}
+	</ul>
+</form>

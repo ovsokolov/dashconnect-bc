@@ -12,7 +12,7 @@ export default class ImageGallery {
 
     init() {
         this.bindEvents();
-        this.setImageZoom();
+        // this.setImageZoom(); // remove image zoom
     }
 
     setMainImage(imgObj) {
@@ -21,14 +21,14 @@ export default class ImageGallery {
         this.destroyImageZoom();
         this.setActiveThumb();
         this.swapMainImage();
-        this.setImageZoom();
+        // this.setImageZoom(); // remove image zoom
     }
 
     setAlternateImage(imgObj) {
         if (!this.savedImage) {
             this.savedImage = {
                 mainImageUrl: this.$mainImage.find('img').attr('src'),
-                zoomImageUrl: this.$mainImage.attr('data-zoom-image'),
+                // zoomImageUrl: this.$mainImage.attr('data-zoom-image'), // remove image zoom
                 $selectedThumb: this.currentImage.$selectedThumb,
             };
         }
@@ -48,7 +48,7 @@ export default class ImageGallery {
         const $target = $(e.currentTarget);
         const imgObj = {
             mainImageUrl: $target.attr('data-image-gallery-new-image-url'),
-            zoomImageUrl: $target.attr('data-image-gallery-zoom-image-url'),
+            // zoomImageUrl: $target.attr('data-image-gallery-zoom-image-url'), // remove image zoom
             $selectedThumb: $target,
         };
 

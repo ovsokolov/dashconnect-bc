@@ -24,6 +24,7 @@ category:
 {{{category.description}}}
 {{{snippet 'categories'}}}
 <div class="page">
+    <!--
     {{#or category.subcategories category.faceted_search_enabled}}
         <aside class="page-sidebar" id="faceted-search-container">
             {{> components/category/sidebar}}
@@ -35,11 +36,12 @@ category:
             </aside>
         {{/if}}
     {{/or}}
+    -->
     <main class="page-content" id="product-listing-container">
         {{#if category.products}}
             {{> components/category/product-listing}}
         {{else}}
-            <p>{{lang 'categories.no_products'}}</p>
+            {{> components/category/sub-category-listing}}
         {{/if}}
     </main>
 </div>

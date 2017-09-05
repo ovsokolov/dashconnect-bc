@@ -6,6 +6,7 @@ import utils from '@bigcommerce/stencil-utils';
 import ShippingEstimator from './cart/shipping-estimator';
 import { defaultModal } from './global/modal';
 import swal from 'sweetalert2';
+import Analytics from 'analytics-node';
 
 export default class Cart extends PageManager {
     loaded(next) {
@@ -16,6 +17,39 @@ export default class Cart extends PageManager {
             .hide(); // TODO: temporary until roper pulls in his cart components
 
         this.bindEvents();
+        this.$analytics = new Analytics('8RrZZr0glvYMyA1IBQDSwoLZBdJFzCKS');
+        this.$mycystomer = this.context.mycustomer;
+
+        const mycart = this.context.mycart;
+        // console.log(mycart);
+
+        const cartArray = [];
+        mycart.forEach((arrayItem) => {
+            const cartItem = {};
+            cartItem.product_id = arrayItem.product_id;
+            cartItem.quantity = arrayItem.quantity;
+            cartItem.name = arrayItem.name;
+            cartItem.sku = arrayItem.sku;
+            cartArray.push(cartItem);
+        });
+
+        this.$analytics.identify({
+            userId: this.$mycystomer.id,
+            traits: {
+                name: this.$mycystomer.name,
+                email: this.$mycystomer.email,
+            },
+        });
+
+        this.$analytics.track({
+            userId: this.$mycystomer.id,
+            event: 'View Cart Details',
+            properties: { mycart },
+        });
+
+        this.$analytics.flush(() => {
+            // console.log('Flushed, and now this program can exit!');
+        });
 
         next();
     }
@@ -61,6 +95,12 @@ export default class Cart extends PageManager {
                 });
             }
         });
+
+        if (window.analytics === null) {
+            // console.log('In cart update found');
+        } else {
+            // console.log('In cart update error!!');
+        }
     }
 
     cartRemoveItem(itemId) {
@@ -75,6 +115,12 @@ export default class Cart extends PageManager {
                 });
             }
         });
+
+        if (window.analytics === null) {
+            // console.log('In cart remove found');
+        } else {
+            // console.log('In cart remove error!!');
+        }
     }
 
     cartEditOptions(itemId) {

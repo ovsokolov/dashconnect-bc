@@ -75,5 +75,8 @@ module.exports = {
             sweetalert2: path.resolve(__dirname, 'node_modules/sweetalert2/dist/sweetalert2.min.js'),
         },
     },
+    node: {
+      fs: 'empty'
+    },
     watch: false,
 };

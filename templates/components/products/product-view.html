@@ -10,6 +10,11 @@
 
     <section class="productView-details">
         <div class="productView-product">
+            {{inject 'productID' product.id}}
+            {{inject 'productBreadcrumbs' breadcrumbs}}
+
+
+
             <h1 class="productView-title" {{#if schema}}itemprop="name"{{/if}}>{{product.title}}</h1>
 
             <h2 class="productView-brand"{{#if schema}} itemprop="brand" itemscope itemtype="http://schema.org/Brand"{{/if}}>
@@ -182,7 +187,7 @@
         </ul>
     </section>
 
-    <section class="productView-details">
+    <section class="productView-details  steps-section">
         <div class="productView-options">
             {{#if product.release_date }}
                 <p>{{product.release_date}}</p>
@@ -194,10 +199,17 @@
                     {{#each product.customizations}}
                         {{{dynamicComponent 'components/products/customizations'}}}
                     {{/each}}
+                <div id="optionTop"></div>
                 <div data-product-option-change style="display:none;">
-                    {{#each product.options}}
-                        {{{dynamicComponent 'components/products/options'}}}
-                    {{/each}}
+                    <ul id='step-breadcrumb' class="clearfix" style="display:none;">
+                    </ul>
+                    <div id="div-option" class="bulkorder-content clearfix" style="display:none;">
+                        <label class="form-label form-label--alternate form-label--inlineSmall" id="step-name"></label>
+                        {{inject 'productOptions' product.options}}
+                        {{#each product.options}}
+                            {{{dynamicComponent 'components/products/options'}}}
+                        {{/each}}
+                    </div>
                 </div>
                 {{#if product.event_date}}
                     {{> components/products/event-date}}
@@ -208,6 +220,7 @@
                         <span data-product-stock>{{product.stock_level}}</span>
                     </label>
                 </div>
+                <input type="button" style="display: none;" value="Prev" id="option-prev" class="button button--primary"><input type="button" style="display: none;" value="Next" id="option-next" class="button button--primary">
                 {{#if product.can_purchase}}
                     {{> components/products/add-to-cart}}
                 {{/if}}
