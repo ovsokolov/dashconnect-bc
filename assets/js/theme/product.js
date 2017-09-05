@@ -226,6 +226,7 @@ export default class Product extends PageManager {
                 break;
             }
         }
+        document.getElementById('optionTop').scrollIntoView();
     }
 
     movePrev() {
@@ -274,6 +275,7 @@ export default class Product extends PageManager {
                 break;
             }
         }
+        document.getElementById('optionTop').scrollIntoView();
     }
 
     buildBreadcrumb() {
