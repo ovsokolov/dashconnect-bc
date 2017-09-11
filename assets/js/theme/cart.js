@@ -9,7 +9,12 @@ import swal from 'sweetalert2';
 import Analytics from 'analytics-node';
 
 export default class Cart extends PageManager {
+    constructor() {
+        super();
+        console.log('!!!!!!!!!!!!cart constructor!!!!!!!!!!!!!!!!!');
+    }
     loaded(next) {
+        console.log('in cart');
         this.$cartContent = $('[data-cart-content]');
         this.$cartMessages = $('[data-cart-status]');
         this.$cartTotals = $('[data-cart-totals]');
@@ -20,17 +25,21 @@ export default class Cart extends PageManager {
         this.$analytics = new Analytics('8RrZZr0glvYMyA1IBQDSwoLZBdJFzCKS');
         this.$mycystomer = this.context.mycustomer;
 
-        const mycart = this.context.mycart;
-        // console.log(mycart);
+        this.loadProductOptions = this.loadProductOptions.bind(this);
 
-        const cartArray = [];
+        document.addEventListener('DOMContentLoaded', this.loadProductOptions());
+
+        const mycart = this.context.mycart;
+        console.log(mycart);
+
+        this.cartArray = [];
         mycart.forEach((arrayItem) => {
             const cartItem = {};
             cartItem.product_id = arrayItem.product_id;
             cartItem.quantity = arrayItem.quantity;
             cartItem.name = arrayItem.name;
             cartItem.sku = arrayItem.sku;
-            cartArray.push(cartItem);
+            this.cartArray.push(cartItem);
         });
 
         this.$analytics.identify({
@@ -52,6 +61,27 @@ export default class Cart extends PageManager {
         });
 
         next();
+    }
+
+    after() {
+        console.log('here');
+        const optionsEllements = document.querySelectorAll('[data-step-name]');
+        optionsEllements.forEach((value) => {
+            console.log(value);
+        });
+    }
+
+    loadProductOptions() {
+        this.context.mycart.forEach((value) => {
+            utils.api.product.getById(
+                value.product_id,
+                // { params: { debug: "context" } },
+                { template: 'products/_nt-product-price-json' },
+                (err, resp) => {
+                    const result = JSON.parse(resp.replace(/&quot;/g, '"'));
+                    console.log(result);
+                });
+        });
     }
 
     cartUpdate($target) {
@@ -235,7 +265,7 @@ export default class Cart extends PageManager {
             });
             event.preventDefault();
         });
-
+        // Catch cart change event
         $('[data-item-edit]', this.$cartContent).on('click', (event) => {
             const itemId = $(event.currentTarget).data('item-edit');
 

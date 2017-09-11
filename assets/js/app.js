@@ -71,22 +71,23 @@ window.stencilBootstrap = function stencilBootstrap(pageType, contextJSON = null
                 const pageClassImporter = pageClasses[pageType];
                 if (typeof pageClassImporter === 'function') {
                     PageClass = (await pageClassImporter()).default;
-                    // console.log('PageClass:', PageClass);
+                    console.log('PageClass:', PageClass);
                 }
 
                 if (loadGlobal) {
                     globalClass = new Global();
                     globalClass.context = context;
-                    // console.log('globalClass', globalClass);
+                    console.log('globalClass', globalClass);
                 }
 
                 if (PageClass) {
+                    console.log('pageClass', pageClass);
                     pageClass = new PageClass(context);
                     pageClass.context = context;
                 }
 
                 if (globalClass) {
-                    // console.log('globalClass load');
+                    console.log('globalClass load');
                     globalClass.load();
                 }
 

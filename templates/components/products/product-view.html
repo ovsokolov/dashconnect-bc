@@ -220,10 +220,15 @@
                         <span data-product-stock>{{product.stock_level}}</span>
                     </label>
                 </div>
-                <input type="button" style="display: none;" value="Prev" id="option-prev" class="button button--primary"><input type="button" style="display: none;" value="Next" id="option-next" class="button button--primary">
-                {{#if product.can_purchase}}
-                    {{> components/products/add-to-cart}}
-                {{/if}}
+                <div class="form-action">
+                    <input type="button" style="display: none;" value="Start Building Your Product" id="build-product" class="button button--primary">
+                </div>
+                <div style="display:none;" id="review-step">
+                    <ul id="selected-options-list"></ul>
+                    {{#if product.can_purchase}}
+                        {{> components/products/add-to-cart}}
+                    {{/if}}
+                </div>
                 {{#if product.out_of_stock}}
                     {{#if product.out_of_stock_message}}
                         {{> components/common/alert-error product.out_of_stock_message}}
@@ -231,7 +236,9 @@
                         {{> components/common/alert-error (lang 'products.sold_out')}}
                     {{/if}}
                 {{/if}}
+                 <input type="button" style="display: none;" value="Prev" id="option-prev" class="button button--primary"><input type="button" style="display: none;" value="Next" id="option-next" class="button button--primary">               
             </form>
+            </br>
             {{#if settings.show_wishlist}}
                 <form class="form" method="post" action="{{product.add_to_wishlist_url}}" data-wishlist-add>
                     <div class="form-action">

@@ -1,3 +1,4 @@
+/* eslint-disable no-loop-func */
 /*
  Import all product specific js
  */
@@ -10,13 +11,14 @@ import videoGallery from './product/video-gallery';
 import { classifyForm } from './common/form-utils';
 
 import utils from '@bigcommerce/stencil-utils';
+
 /*
 let productOptionsSingleton = null;
 
 utils.hooks.on('product-option-change', (event, changedOption) => {
     if (productOptionsSingleton) {
-        // console.log('in product.js');
-        // productSingleton.productOptionsChanged(event, changedOption);
+        console.log('in product.js');
+        productSingleton.productOptionsChanged(event, changedOption);
     }
 });
 */
@@ -29,19 +31,22 @@ export default class Product extends PageManager {
         const buidProduct = document.getElementById('build-product');
         this.url = location.href;
         this.stepArray = new Array(10);
+        this.optionsMap = new Map();
         this.currentStep = -1;
         this.$reviewLink = $('[data-reveal-id="modal-review-form"]');
         this.moveNext = this.moveNext.bind(this);
         this.movePrev = this.movePrev.bind(this);
         this.hideAll = this.hideAll.bind(this);
         this.startBuild = this.startBuild.bind(this);
-        this.setPrice = this.setPrice.bind(this);
+        // this.setPrice = this.setPrice.bind(this);
+        this.setUpWizardData = this.setUpWizardData.bind(this);
         this.attachDetailsListener = this.attachDetailsListener.bind(this);
         this.buildBreadcrumb = this.buildBreadcrumb.bind(this);
         this.highlightBreadCrumb = this.highlightBreadCrumb.bind(this);
         prev.addEventListener('click', this.movePrev);
         next.addEventListener('click', this.moveNext);
         buidProduct.addEventListener('click', this.startBuild);
+
 
         // productOptionsSingleton = this;
     }
@@ -94,31 +99,7 @@ export default class Product extends PageManager {
 
         const breadCrumbsArray = this.context.productBreadcrumbs;
         const productID = this.context.productID;
-        const productOptions = this.context.productOptions;
-        console.log(productOptions);
-        productOptions.forEach((value) => {
-            if (value.display_name) {
-                // console.log(value.display_name);
-                const stepName = value.display_name;
-                const res = stepName.split('-');
-                // console.log(res[1]);
-                const stepNumber = parseInt(res[1], 10);
-                if (this.stepArray[stepNumber] === undefined) {
-                    this.stepArray[stepNumber] = [];
-                }
-                const stepOptions = this.stepArray[stepNumber];
-                stepOptions.push(value.display_name);
-                this.stepArray[stepNumber] = stepOptions;
-            }
-        });
-
-        this.stepArray = this.stepArray.filter((element) => {
-            let i = 0;
-            i++;
-            return element !== undefined;
-        });
-        // console.log(this.stepArray);
-        // console.log(this.currentStep);
+        // const productOptions = this.context.productOptions;
 
         this.hideAll();
 
@@ -161,9 +142,8 @@ export default class Product extends PageManager {
             }
         );
 
-        this.setPrice();
+        // this.setUpPageData();
         this.attachDetailsListener();
-        this.buildBreadcrumb();
     }
 
     highlightBreadCrumb() {
@@ -178,7 +158,7 @@ export default class Product extends PageManager {
     }
 
     moveNext() {
-        // console.log("next");
+        // console.log('next');
         let nextStep = -1;
         // console.log('Current Step ', this.currentStep );
         for (let i = this.currentStep + 1; i < this.stepArray.length; i++) {
@@ -195,27 +175,33 @@ export default class Product extends PageManager {
                 // console.log(this.currentStep);
                 const currentStepOptions = this.stepArray[this.currentStep];
                 optionsEllements.forEach((value) => {
-                    const j = currentStepOptions.indexOf(value.dataset.stepName);
-                    if (j > - 1) {
-                        // console.log(value.dataset.stepName);
-                        // console.log("found");
-                        $(value).show();
-                    } else {
-                        // console.log(value.dataset.stepName);
-                        // console.log("not found");
+                    // console.log("Div Name: ", value.dataset.stepName);
+                    // console.log("currentStepOptions: ", currentStepOptions);
+                    if (currentStepOptions.step_name === 'STEP_REVIIEW') {
                         $(value).hide();
+                        // console.log('Show Review');
+                        $('#review-step').show();
+                    } else {
+                        const j = currentStepOptions.step_name.indexOf(value.dataset.stepName);
+                        if (j > - 1) {
+                            // console.log(value.dataset.stepName);
+                            // console.log("found");
+                            $(value).show();
+                        } else {
+                            // console.log(value.dataset.stepName);
+                            // console.log("not found");
+                            $(value).hide();
+                        }
                     }
                 });
                 // console.log("Next Step ", nextStep);
                 if (nextStep > -1) {
                     // console.log(currentStepOptions);
-                    const stepName = this.stepArray[nextStep][0];
-                    // console.log(stepName);
-                    const stepNameSplit = stepName.split('-');
+                    const stepName = this.stepArray[nextStep];
                     // console.log(stepNameSplit)
                     const lableDivision = document.getElementById('step-name');
                     // lableDivision.innerHTML = stepNameSplit[0].concat(' ', stepNameSplit[1]);
-                    lableDivision.innerHTML = stepNameSplit[0].concat(' ', (i + 1));
+                    lableDivision.innerHTML = stepName.step_desc;
                 }
                 // Highlight BreadCrumb
                 liCurrent = '#li-step-'.concat(this.currentStep + 1);
@@ -232,6 +218,12 @@ export default class Product extends PageManager {
     movePrev() {
         // console.log("prev");
         let prevStep = -1;
+        let currentStepOptions = this.stepArray[this.currentStep];
+        if (currentStepOptions.step_name === 'STEP_REVIIEW') {
+            // TODO hide review
+            // console.log('Hide Review');
+            $('#review-step').hide();
+        }
         for (let i = this.currentStep - 1; i >= 0; i--) {
             if (this.stepArray[i] !== undefined) {
                 // Change Current to normal bradcrumb
@@ -242,9 +234,10 @@ export default class Product extends PageManager {
                 prevStep = i;
                 const optionsEllements = document.querySelectorAll('[data-step-name]');
                 // console.log(optionsEllements);
-                const currentStepOptions = this.stepArray[this.currentStep];
+                currentStepOptions = this.stepArray[this.currentStep];
+                // console.log(currentStepOptions);
                 optionsEllements.forEach((value) => {
-                    const j = currentStepOptions.indexOf(value.dataset.stepName);
+                    const j = currentStepOptions.step_name.indexOf(value.dataset.stepName);
                     if (j > - 1) {
                         // console.log(value.dataset.stepName);
                         // console.log("found");
@@ -256,14 +249,11 @@ export default class Product extends PageManager {
                     }
                 });
                 if (prevStep > -1) {
-                    // console.log(currentStepOptions);
-                    const stepName = this.stepArray[prevStep][0];
-                    // console.log(stepName);
-                    const stepNameSplit = stepName.split('-');
+                    const stepName = this.stepArray[prevStep];
                     // console.log(stepNameSplit)
                     const lableDivision = document.getElementById('step-name');
                     // lableDivision.innerHTML = stepNameSplit[0].concat(' ', stepNameSplit[1]);
-                    lableDivision.innerHTML = stepNameSplit[0].concat(' ', (i + 1));
+                    lableDivision.innerHTML = stepName.step_desc;
                 }
 
                 // Highlight Curent BreadCrumb
@@ -279,14 +269,22 @@ export default class Product extends PageManager {
     }
 
     buildBreadcrumb() {
+        // console.log('buildBreadcrumb');
+        this.stepArray = this.stepArray.filter((element) => {
+            let i = 0;
+            i++;
+            return element !== undefined;
+        });
+        this.stepArray.push({ step_name: 'STEP_REVIIEW', step_desc: 'Review' });
+        // console.log(this.stepArray);
         const breadcrumb = document.getElementById('step-breadcrumb');
-        console.log('Breadcrumb length: ', this.stepArray.length);
+        // console.log('Breadcrumb length: ', this.stepArray.length);
         for (let i = 0; i < this.stepArray.length; i++) {
             const li = document.createElement('li');
-            const stepName = this.stepArray[i][0];
+            // console.log(this.stepArray[i]);
+            const stepName = this.stepArray[i].step_desc;
             // console.log(stepName);
-            const stepNameSplit = stepName.split('-');
-            li.appendChild(document.createTextNode(stepNameSplit[0].concat(' ', (i + 1))));
+            li.appendChild(document.createTextNode(stepName));
             li.setAttribute('id', 'li-step-'.concat(i + 1));
             breadcrumb.appendChild(li);
         }
@@ -304,11 +302,11 @@ export default class Product extends PageManager {
     }
 
     startBuild() {
+        this.setUpWizardData();
         $('#build-product').hide();
         $('#step-breadcrumb').show();
         $('#div-option').show();
         this.currentStep = -1;
-        this.moveNext();
     }
 
     showNext() {
@@ -333,25 +331,47 @@ export default class Product extends PageManager {
         }
     }
 
-    setPrice() {
+    setUpWizardData() {
         const optionsArray = this.context.productOptions;
-        // console.log(optionsArray);
+        // const breadcrumb = document.getElementById('step-breadcrumb');
+        // console.log('setUpPageData');
+        let optionCounter = 0;
         optionsArray.forEach((optionSet) => {
             const values = optionSet.values;
-            // console.log(value.data);
+            // console.log(optionSet);
             values.forEach((value) => {
                 const spanId = '#price_'.concat(value.data);
-                // console.log(spanId);
+                // console.log(value.data);
                 utils.api.product.getById(
                     value.data,
                     // { params: { debug: "context" } },
                     { template: 'products/_nt-product-price-json' },
                     (err, resp) => {
+                        const querySelector = '[data-step-name="step_for_option_'.concat(optionSet.id).concat('"]');
+                        const stepDIV = document.querySelectorAll(querySelector);
+                        optionCounter++;
+                        // console.log('optionCounter:', optionCounter);
                         // console.log(resp);
-                        const price = JSON.parse(resp.replace(/&quot;/g, '"'));
-                        // console.log(price);
-                        // console.log('here');
-                        $(spanId).html('<s>'.concat('+(', price.without_tax.formatted, ')</s> +(', price.without_tax.formatted, ')'));
+                        const result = JSON.parse(resp.replace(/&quot;/g, '"'));
+                        // console.log(result);
+                        // console.log(result.price);
+                        // console.log(result.custom_fields);
+                        result.custom_fields.forEach((field) => {
+                            if (field.name === 'DNT_STEP_NAME') {
+                                // console.log("Step Name Field Value: ", field.value);
+                                const nameSplit = field.value.split('=');
+                                const stepSplit = nameSplit[0].split('-');
+                                if (this.stepArray[stepSplit[1] - 1] === undefined) {
+                                    this.stepArray[stepSplit[1] - 1] = { step_name: 'STEP_'.concat(stepSplit[1]), step_desc: nameSplit[1] };
+                                }
+                                stepDIV[0].dataset.stepName = 'STEP_'.concat(stepSplit[1]);
+                            }
+                        });
+                        if (optionCounter === optionsArray.length) {
+                            this.buildBreadcrumb();
+                            this.moveNext();
+                        }
+                        $(spanId).html('<s>'.concat('+(', result.price.without_tax.formatted, ')</s> +(', result.price.without_tax.formatted, ')'));
                     });
             });
         });
@@ -373,6 +393,13 @@ export default class Product extends PageManager {
                 // console.log("Calling with", productId)
                 buttonEllement.addEventListener('click', () => {
                     // console.log('showOptionDetails:', productId);
+                    if (buttonEllement.classList.contains('closed-details')) {
+                        // console.log('Show Closed');
+                        buttonEllement.className = buttonEllement.className.replace('closed-details', 'open-details');
+                    } else {
+                        // console.log('Show Open');
+                        buttonEllement.className = buttonEllement.className.replace('open-details', 'closed-details');
+                    }
                     const detailsDivId = '#option_details_'.concat(productId);
                     // console.log(detailsDivId);
                     // console.log($(detailsDivId));

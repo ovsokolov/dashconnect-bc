@@ -39,8 +39,33 @@
       .form-field{
         float: left;
         width: 100%;
+        .form-label{
+        float: left;
+        width: auto !important;
+        margin: 9px 10px 0 0;
+        }
         .button{
           padding: 10px 15px;
+        }
+        a.button{
+          font-size: 0;
+          position: relative;
+          border-radius: 50%;
+          padding: 0;
+          height: 32px;
+          width: 32px;          
+          &:before{
+            content: 'x';
+            position: absolute;
+            font-size: 18px;
+            left:0;
+            font-weight: bold;
+            width: 32px;
+            height: 32px;
+            top: 0px;
+            line-height: 29px;
+            text-align: center;
+          }
         }
         .productView-images{
           width: 50%;
@@ -48,5 +73,19 @@
         .productView-description{
           width: 50%;
         }
+        .form-radio + .form-label:before, .form-radio + .form-label:after {
+            border-radius: 0;
+        }
       }
   }
+  
+ .accordianblock {
+    display: inline-block;
+     .plus-icon,.minus-icon {
+        color: #000;
+        display: inline-block;
+        font-size: 24px;
+        padding: 0 10px;
+        cursor:pointer;
+    }
+}

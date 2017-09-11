@@ -6,7 +6,7 @@ function removeOption(id){
 }
 </script>
 
-<div class="form-field" data-product-attribute="product-list" data-step-name="{{display_name}}">
+<div class="form-field" data-product-attribute="product-list" data-step-name="step_for_option_{{id}}">
     <div style="display: none;">
         <label class="form-label form-label--alternate form-label--inlineSmall">
             {{display_name}}:
@@ -52,7 +52,11 @@ function removeOption(id){
                                 <span id="price_{{data}}"></span>
                             </label>
                             <a href="#" class="button" onclick="removeOption({{../id}})">Remove</a>
+                            <span class="show_hide_btn closed-details" id="btn_option_details_{{data}}"><a href="#" class="button">Show Details</a></span>
+
+                            <!--
                             <input type="button" value="Show Details" id="btn_option_details_{{data}}" class="button button--primary">
+                            -->
                     </div>
                     <div class="productView-options" style="font-size: 14px;"  id="option_details_{{data}}"></div>
                 </li>
@@ -84,7 +88,10 @@ function removeOption(id){
                     <span id="price_{{data}}"></span>
                 </label>
                 <a href="#" class="button" onclick="removeOption({{../id}})">Remove</a>
+                <!--
                 <input type="button" value="Show Details" id="btn_option_details_{{data}}" class="button button--primary">
+                -->
+                <span class="show_hide_btn closed-details" id="btn_option_details_{{data}}"><a href="#" class="button">Show Details</a></span>
                  <div class="productView-options" style="font-size: 14px;" id="option_details_{{data}}"></div>
         {{/each}}
     {{/if}}

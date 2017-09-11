@@ -22,6 +22,10 @@ export default class ProductDetails {
         const $productOptionsElement = $('[data-product-option-change]', $form);
         const hasOptions = $productOptionsElement.html().trim().length;
 
+        this.allOptionsArray = this.context.productOptions;
+        this.selectedOption = new Map();
+        this.buildReviewList = this.buildReviewList.bind(this);
+
         $productOptionsElement.change(event => {
             this.productOptionsChanged(event);
         });
@@ -100,10 +104,6 @@ export default class ProductDetails {
         const $form = $changedOption.parents('form');
         const productId = $('[name="product_id"]', $form).val();
 
-        // console.log('option changed');
-        // console.log($changedOption);
-        // console.log(productId);
-
         // Do not trigger an ajax request if it's a file or if the browser doesn't support FormData
         if ($changedOption.attr('type') === 'file' || window.FormData === undefined) {
             return;
@@ -117,6 +117,43 @@ export default class ProductDetails {
             this.updateProductAttributes(productAttributesData);
             this.updateView(productAttributesData);
         });
+
+        // console.log('option changed');
+        // console.log($changedOption.attr('id'));
+        if ($changedOption.attr('id').startsWith('attribute_0_')) {
+            const optionID = $changedOption.attr('id').split('_')[2];
+            // console.log('remove option: ', optionID);
+            this.selectedOption.delete(parseInt(optionID, 10));
+            // console.log(this.selectedOption);
+            this.buildReviewList();
+        } else {
+            const optionProductID = $changedOption.attr('id').split('_')[1];
+            // console.log('add option product id: ', optionProductID);
+            const BreakException = {};
+            try {
+                this.allOptionsArray.forEach((optionSet) => {
+                    const values = optionSet.values;
+                    const optionID = optionSet.id;
+                    // console.log('loop option  id: ', optionID);
+                    // console.log(optionSet);
+                    values.forEach((value) => {
+                        // console.log('value.id: ', value.id);
+                        // console.log('optionProductID: ', optionProductID);
+                        if (parseInt(value.id, 10) === parseInt(optionProductID, 10)) {
+                            // console.log('Product Found');
+                            this.selectedOption.set(optionID, value.label);
+                            // console.log(this.selectedOption);
+                            this.buildReviewList();
+                            throw BreakException;
+                        }
+                    });
+                });
+            } catch (e) {
+                // console.log('catch BreakException');
+                if (e !== BreakException) throw e;
+            }
+        }
+        // console.log(productId);
     }
 
     showProductImage(image) {
@@ -508,6 +545,16 @@ export default class ProductDetails {
             }
 
             $radio.attr('data-state', $radio.prop('checked'));
+        });
+    }
+
+    buildReviewList() {
+        $('#selected-options-list').empty();
+        this.selectedOption.forEach((value) => {
+            const ul = document.getElementById('selected-options-list');
+            const li = document.createElement('li');
+            li.appendChild(document.createTextNode(value));
+            ul.appendChild(li);
         });
     }
 }
