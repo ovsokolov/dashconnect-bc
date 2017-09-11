@@ -393,26 +393,28 @@ export default class Product extends PageManager {
                 // console.log("Calling with", productId)
                 buttonEllement.addEventListener('click', () => {
                     // console.log('showOptionDetails:', productId);
+                    const detailsDivId = '#option_details_'.concat(productId);
                     if (buttonEllement.classList.contains('closed-details')) {
                         // console.log('Show Closed');
+                        utils.api.product.getById(
+                            productId,
+                            // { params: { debug: "context" } },
+                            { template: 'products/_nt-product-option-view' },
+                            (err, resp) => {
+                                // console.log(resp);
+                                $(detailsDivId).html(resp);
+                                $(detailsDivId).show();
+                            }
+                        );
                         buttonEllement.className = buttonEllement.className.replace('closed-details', 'open-details');
                     } else {
                         // console.log('Show Open');
                         buttonEllement.className = buttonEllement.className.replace('open-details', 'closed-details');
+                        $(detailsDivId).hide();
                     }
-                    const detailsDivId = '#option_details_'.concat(productId);
                     // console.log(detailsDivId);
                     // console.log($(detailsDivId));
                     // $(detailsDivId).html("Product ID:".concat(productId));
-                    utils.api.product.getById(
-                        productId,
-                        // { params: { debug: "context" } },
-                        { template: 'products/_nt-product-option-view' },
-                        (err, resp) => {
-                            // console.log(resp);
-                            $(detailsDivId).html(resp);
-                        }
-                    );
                 });
             });
         });
