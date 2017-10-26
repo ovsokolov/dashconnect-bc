@@ -43,6 +43,14 @@ category:
         {{else}}
             {{> components/category/sub-category-listing}}
         {{/if}}
+        {{#eachIndex (split "xyz_abc" "_")}}
+            {{#eq item "xyz"}}
+                {{> components/features/feature_xyz alignIndex=index }}
+            {{/eq}}
+            {{#eq item "abc"}}
+                {{> components/features/feature_abc alignIndex=index }}
+            {{/eq}}
+        {{/eachIndex}}
     </main>
 </div>
 

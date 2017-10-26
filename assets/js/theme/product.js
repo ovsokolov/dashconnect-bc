@@ -351,9 +351,9 @@ export default class Product extends PageManager {
                         const stepDIV = document.querySelectorAll(querySelector);
                         optionCounter++;
                         // console.log('optionCounter:', optionCounter);
-                        // console.log(resp);
+                        console.log(resp);
                         const result = JSON.parse(resp.replace(/&quot;/g, '"'));
-                        // console.log(result);
+                        console.log(result);
                         // console.log(result.price);
                         // console.log(result.custom_fields);
                         result.custom_fields.forEach((field) => {
